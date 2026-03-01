@@ -6,7 +6,7 @@ export default function Template({ children }: { children: ReactNode }) {
   return (
     <div>
       <Navbar />
-      <div className="custom-container pt-14">{children}</div>
+      <div className="custom-container pt-16 ">{children}</div>
     </div>
   );
 }

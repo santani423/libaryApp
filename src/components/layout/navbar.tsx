@@ -7,7 +7,7 @@ export default function Navbar() {
 
   return (
     <div className="fixed top-0 z-50 w-full shadow-md">
-      <div className="flex items-center justify-between px-4 h-14">
+      <div className="custom-container flex items-center justify-between p-6 h-14 md:px-28 bg-white">
         {/* Logo */}
         <Image src={Logo} alt="Logo" width={33} height={33} />
 

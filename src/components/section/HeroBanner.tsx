@@ -6,12 +6,11 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel"
 
 export function HeroBanner() {
+  const slides = [1, 2, 3, 4, 5]
   const [api, setApi] = React.useState<CarouselApi>()
   const [current, setCurrent] = React.useState(0)
   const [count, setCount] = React.useState(0)
@@ -24,27 +23,50 @@ export function HeroBanner() {
     setCount(api.scrollSnapList().length)
     setCurrent(api.selectedScrollSnap() + 1)
 
-    api.on("select", () => {
+    const handleSelect = () => {
       setCurrent(api.selectedScrollSnap() + 1)
-    })
+    }
+
+    api.on("select", handleSelect)
+
+    return () => {
+      api.off("select", handleSelect)
+    }
+  }, [api])
+
+  React.useEffect(() => {
+    if (!api) {
+      return
+    }
+
+    const autoSlide = setInterval(() => {
+      if (api.canScrollNext()) {
+        api.scrollNext()
+        return
+      }
+
+      api.scrollTo(0)
+    }, 3000)
+
+    return () => {
+      clearInterval(autoSlide)
+    }
   }, [api])
 
   return (
-    <div className="mx-auto max-w-[10rem] sm:max-w-xs">
-      <Carousel setApi={setApi} className="w-full max-w-xs">
+    <div className="mx-auto w-full max-w-full space-y-2 rounded-lg p-4 ">
+      <Carousel setApi={setApi} className="w-full">
         <CarouselContent>
-          {Array.from({ length: 5 }).map((_, index) => (
-            <CarouselItem key={index}>
+          {slides.map((slide) => (
+            <CarouselItem key={slide}>
               <Card className="m-px">
-                <CardContent className="flex aspect-square items-center justify-center p-6">
-                  <span className="text-4xl font-semibold">{index + 1}</span>
+                <CardContent className="flex h-44 items-center justify-center p-6 sm:h-52 md:h-60 lg:h-64">
+                  <span className="text-4xl font-semibold">{slide}</span>
                 </CardContent>
               </Card>
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
       </Carousel>
       <div className="text-muted-foreground py-2 text-center text-sm">
         Slide {current} of {count}
