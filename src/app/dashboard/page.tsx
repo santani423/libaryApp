@@ -8,7 +8,7 @@ export default function DashboardPage() {
 //   const [bookCategory, setBookCategory] = useState<string | null>(null);
   return (
     <Template>
-      <div className="custom-container justify-center items-center md:px-28 bg-white">
+      <div className="custom-container justify-center items-center md:px-28 bg-white pb-6">
         <HeroBanner />
         <BookCategory />
         <RecommendationBook />
