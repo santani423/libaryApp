@@ -6,10 +6,10 @@ import { Label } from "@/components/ui/label";
 
 export default function FilterForm() {
   return (
-    <Card className="rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 p-4">
+    <Card className="w-full rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 p-4">
       <h2 className="text-sm font-bold mb-4">FILTER</h2>
       <h2 className="text-xxl font-bold mb-4">Category</h2>
-      <FieldGroup className="max-w-sm">
+      <FieldGroup className="w-full">
         <Field orientation="horizontal">
           <Checkbox id="terms-checkbox" name="terms-checkbox" />
           <Label htmlFor="terms-checkbox">Fiction</Label>

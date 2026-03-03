@@ -2,6 +2,7 @@ import Template from "@/components/layout/template";
 import FilterForm from "@/components/section/FilterForm";
 import { Card } from "@/components/ui/card";
 import { BookLists } from "@/components/section/BookLists";
+import RatingForm from "@/components/section/ReatingForm";
 export default function Category() {
   return (
     <Template>
@@ -29,12 +30,13 @@ export default function Category() {
         </Card>
         <div className="custom-container grid grid-cols-12 gap-6 mt-4">
           {/* Left Column */}
-          <div className="col-span-2 border-b border-gray-300 pb-4">
+          <div className="col-span-3 hidden md:block xl:block border-b border-gray-300 pb-4">
             <FilterForm />
+            <RatingForm />
           </div>
 
           {/* Right Column */}
-          <div className="col-span-10 border-b border-gray-300 pb-4">
+          <div className="col-span-12 border-b border-gray-300 pb-4 md:col-span-9 xl:col-span-9">
             <BookLists />
           </div>
         </div>
