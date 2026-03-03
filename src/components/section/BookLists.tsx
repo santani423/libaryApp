@@ -3,14 +3,16 @@
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import Logo from "@/assets/Logo.svg";
+import type { Book } from "@/types/books";
 
 type BookListsProps = {
   title?: string;
 };
 
-export function BookLists({ title = "" }: BookListsProps) {
+export function BookLists({ title = "" }: BookListsProps, books: Book[]) {
   const cards = Array.from({ length: 10 });
-
+  console.log("BookListsBookLists",books);
+  
   return (
     <section className="custom-container px-6 md:px-28 bg-white">
 

@@ -19,15 +19,14 @@ export default function DashboardPage() {
     queryKey: ["bookRecommendations"],
     queryFn: getBookRecommendations,
   });
-
-    console.log("Book Recommendations:", bookRecommendations);
-    
+  console.log("DashboardPageBookRecommendations", bookRecommendations);
+  
   return (
     <Template>
       <div className="custom-container justify-center items-center md:px-28 bg-white pb-6">
         <HeroBanner />
         <BookCategory />
-        <BookLists title="Recommended Books" />
+        <BookLists title="Recommended Books" books={bookRecommendations ?? []} />
         <PopularAuthors />
       </div>
     </Template>
