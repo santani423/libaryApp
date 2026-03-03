@@ -1,12 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { Search } from "lucide-react";
+import { Search, Star } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import Image1 from "@/assets/images/image1.svg";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 
 type BorrowStatus = "active" | "returned" | "overdue";
@@ -70,6 +71,9 @@ const statusClasses: Record<BorrowStatus, string> = {
 export default function Borrowed() {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<"all" | BorrowStatus>("all");
+  const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
+  const [rating, setRating] = useState(4);
+  const [review, setReview] = useState("");
 
   const filteredBooks = useMemo(() => {
     return borrowedBooks.filter((book) => {
@@ -89,6 +93,22 @@ export default function Borrowed() {
     { label: "Returned", value: "returned" },
     { label: "Overdue", value: "overdue" },
   ];
+
+  const handleOpenReview = (bookId: number) => {
+    setSelectedBookId(bookId);
+  };
+
+  const handleDialogChange = (isOpen: boolean) => {
+    if (!isOpen) {
+      setSelectedBookId(null);
+    }
+  };
+
+  const handleSubmitReview = () => {
+    setSelectedBookId(null);
+    setReview("");
+    setRating(4);
+  };
 
   return (
     <section className="w-full space-y-4 rounded-2xl   p-4">
@@ -169,12 +189,59 @@ export default function Borrowed() {
                   </div>
                 </div>
 
-                <Button className="h-10 rounded-full px-8 font-medium">Give Review</Button>
+                <Button className="h-10 rounded-full px-8 font-medium" onClick={() => handleOpenReview(book.id)}>
+                  Give Review
+                </Button>
               </div>
             </CardContent>
           </Card>
         ))}
       </div>
+
+      <Dialog open={selectedBookId !== null} onOpenChange={handleDialogChange}>
+        <DialogContent className="max-w-[320px] gap-3 rounded-lg p-4">
+          <DialogHeader>
+            <DialogTitle className="text-base font-semibold text-gray-900">Give Review</DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-3">
+            <p className="text-center text-[11px] font-medium text-gray-700">Give Rating</p>
+
+            <div className="flex items-center justify-center gap-1">
+              {Array.from({ length: 5 }).map((_, index) => {
+                const currentStar = index + 1;
+                const isActive = currentStar <= rating;
+
+                return (
+                  <button
+                    key={currentStar}
+                    type="button"
+                    onClick={() => setRating(currentStar)}
+                    className="inline-flex h-6 w-6 items-center justify-center"
+                    aria-label={`Set rating ${currentStar}`}
+                  >
+                    <Star
+                      className={`h-4 w-4 ${isActive ? "fill-amber-400 text-amber-400" : "fill-gray-200 text-gray-200"}`}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+
+            <textarea
+              value={review}
+              onChange={(event) => setReview(event.target.value)}
+              placeholder="Please share your thoughts about this book"
+              rows={6}
+              className="w-full resize-none rounded-md border border-gray-200 px-3 py-2 text-xs outline-none ring-0 placeholder:text-gray-400 focus:border-blue-500"
+            />
+
+            <Button className="h-8 w-full rounded-full text-xs font-medium" onClick={handleSubmitReview}>
+              Send
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <div className="flex justify-center pt-1">
         <Button variant="outline" className="h-10 min-w-40 rounded-full px-8">
