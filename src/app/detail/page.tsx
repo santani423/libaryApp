@@ -4,6 +4,7 @@ import Image from "next/image";
 import Img from "@/assets/images/image1.svg";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
+import { ReviewList } from "@/components/section/ReviewList";
 import { BookLists } from "@/components/section/BookLists";
 
 export default function DetailPage() {
@@ -75,9 +76,8 @@ export default function DetailPage() {
         </div>
       </div>
 
+      <ReviewList />
       <BookLists title="Related Books" />
-
-
     </Template>
   );
 }
