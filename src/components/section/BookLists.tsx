@@ -8,12 +8,15 @@ type BookListsProps = {
   title?: string;
 };
 
-export function BookLists({ title = "Recommended Books" }: BookListsProps) {
+export function BookLists({ title = "" }: BookListsProps) {
   const cards = Array.from({ length: 10 });
 
   return (
-    <section className="custom-container px-6 pt-6 md:px-28 bg-white">
-      <h2 className="text-lg font-semibold mb-4">{title}</h2>
+    <section className="custom-container px-6 md:px-28 bg-white">
+
+      {title && (
+        <h2 className="text-lg font-semibold mb-4">{title}</h2>
+      )}
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         {cards.map((_, index) => (
