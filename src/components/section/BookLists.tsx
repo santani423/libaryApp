@@ -24,21 +24,20 @@ export function BookLists({ title = "", books = [] }: BookListsProps) {
           return (
             <Card
               key={book.id ?? index}
-              className="rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300"
+              className="rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105"
             >
-              <CardContent className="flex flex-col gap-2">
-                <div className="w-full flex justify-center items-center   h-32 rounded-md overflow-hidden">
+              <CardContent className="flex flex-col p-3">
+                <div className="relative w-full h-40 overflow-hidden bg-[#E0ECFF] rounded-md">
                   <Image
                     src={imageSrc}
                     alt={book.title ?? `Book ${index + 1}`}
-                    width={80}
-                    height={120}
+                    fill
                     className="object-cover"
                     unoptimized
                   />
                 </div>
 
-                <p className="text-sm font-medium text-left">
+                <p className="text-sm font-medium text-left mt-2">
                   {book.title ?? `Book ${index + 1}`}
                 </p>
               </CardContent>
