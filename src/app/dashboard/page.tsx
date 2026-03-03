@@ -11,7 +11,7 @@ import { getBookRecommendations } from "@/lib/api/books";
 export default function DashboardPage() {
   //   const [bookCategory, setBookCategory] = useState<string | null>(null);
   const {
-    data: categories = [],
+    data: bookRecommendations = [],
     isLoading,
     isError,
     error,
@@ -19,6 +19,9 @@ export default function DashboardPage() {
     queryKey: ["bookRecommendations"],
     queryFn: getBookRecommendations,
   });
+
+    console.log("Book Recommendations:", bookRecommendations);
+    
   return (
     <Template>
       <div className="custom-container justify-center items-center md:px-28 bg-white pb-6">
