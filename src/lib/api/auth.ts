@@ -7,7 +7,17 @@ export type RegisterRequest = {
   password: string;
 };
 
+export type LoginRequest = {
+  email: string;
+  password: string;
+};
+
 export type RegisterResponse = {
+  message?: string;
+  [key: string]: unknown;
+};
+
+export type LoginResponse = {
   message?: string;
   [key: string]: unknown;
 };
@@ -25,6 +35,25 @@ export async function registerUser(payload: RegisterRequest) {
 
   if (!response.ok) {
     const message = data?.message || "Register gagal. Coba lagi.";
+    throw new Error(message);
+  }
+
+  return data;
+}
+
+export async function loginUser(payload: LoginRequest) {
+  const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = (await response.json().catch(() => ({}))) as LoginResponse;
+
+  if (!response.ok) {
+    const message = data?.message || "Login gagal. Coba lagi.";
     throw new Error(message);
   }
 
