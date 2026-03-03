@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { registerUser } from "@/lib/api/auth";
 import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import Logo from "@/assets/Logo.svg";
 import { useForm } from "react-hook-form";
 
@@ -26,6 +27,8 @@ type RegisterFormValues = {
 };
 
 export default function Register() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -45,6 +48,7 @@ export default function Register() {
     mutationFn: registerUser,
     onSuccess: () => {
       reset();
+      router.push("/login");
     },
   });
 
@@ -184,12 +188,8 @@ export default function Register() {
 
             {registerMutation.isError ? (
               <p className="text-sm text-red-500">
-                {(registerMutation.error as Error).message}
+                {registerMutation.error?.message}
               </p>
-            ) : null}
-
-            {registerMutation.isSuccess ? (
-              <p className="text-sm text-green-600">Registrasi berhasil.</p>
             ) : null}
 
             <Button
@@ -204,7 +204,7 @@ export default function Register() {
 
         <CardFooter className="flex flex-col gap-3">
           <p>
-            Already have an account?
+            Already have an account?{" "}
             <a
               href="/login"
               className="ml-auto text-sm text-primary hover:underline"
