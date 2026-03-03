@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,10 +11,52 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { registerUser } from "@/lib/api/auth";
+import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import Logo from "@/assets/Logo.svg";
+import { useForm } from "react-hook-form";
+
+type RegisterFormValues = {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+  confirmPassword: string;
+};
 
 export default function Register() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<RegisterFormValues>({
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const registerMutation = useMutation({
+    mutationFn: registerUser,
+    onSuccess: () => {
+      reset();
+    },
+  });
+
+  const onSubmit = (values: RegisterFormValues) => {
+    registerMutation.mutate({
+      name: values.name,
+      email: values.email,
+      phone: values.phone,
+      password: values.password,
+    });
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-background px-4">
       <Card className="w-full max-w-sm rounded-xl shadow-sm border border-gray-200">
@@ -40,36 +84,59 @@ export default function Register() {
         </CardHeader>
 
         <CardContent>
-          <form className="space-y-5">
+          <form
+            className="space-y-5"
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
+          >
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
               <Input
                 id="name"
                 type="text"
                 placeholder="John Doe"
-                required
+                {...register("name", { required: "Nama wajib diisi" })}
                 className="rounded-md"
               />
+              {errors.name ? (
+                <p className="text-sm text-red-500">{errors.name.message}</p>
+              ) : null}
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
                 placeholder="m@example.com"
-                required
+                {...register("email", {
+                  required: "Email wajib diisi",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Format email tidak valid",
+                  },
+                })}
                 className="rounded-md"
               />
+              {errors.email ? (
+                <p className="text-sm text-red-500">{errors.email.message}</p>
+              ) : null}
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="phone">Nomor Handphone</Label>
               <Input
                 id="phone"
                 type="text"
                 placeholder="08123456789"
-                required
+                {...register("phone", {
+                  required: "Nomor handphone wajib diisi",
+                })}
                 className="rounded-md"
               />
+              {errors.phone ? (
+                <p className="text-sm text-red-500">{errors.phone.message}</p>
+              ) : null}
             </div>
 
             <div className="space-y-2">
@@ -78,9 +145,20 @@ export default function Register() {
               <Input
                 id="password"
                 type="password"
-                required
+                {...register("password", {
+                  required: "Password wajib diisi",
+                  minLength: {
+                    value: 6,
+                    message: "Password minimal 6 karakter",
+                  },
+                })}
                 className="rounded-md"
               />
+              {errors.password ? (
+                <p className="text-sm text-red-500">
+                  {errors.password.message}
+                </p>
+              ) : null}
             </div>
 
             <div className="space-y-2">
@@ -89,21 +167,42 @@ export default function Register() {
               <Input
                 id="confirm-password"
                 type="password"
-                required
+                {...register("confirmPassword", {
+                  required: "Konfirmasi password wajib diisi",
+                  validate: (value, formValues) =>
+                    value === formValues.password ||
+                    "Konfirmasi password tidak sama",
+                })}
                 className="rounded-md"
               />
+              {errors.confirmPassword ? (
+                <p className="text-sm text-red-500">
+                  {errors.confirmPassword.message}
+                </p>
+              ) : null}
             </div>
+
+            {registerMutation.isError ? (
+              <p className="text-sm text-red-500">
+                {(registerMutation.error as Error).message}
+              </p>
+            ) : null}
+
+            {registerMutation.isSuccess ? (
+              <p className="text-sm text-green-600">Registrasi berhasil.</p>
+            ) : null}
+
+            <Button
+              type="submit"
+              disabled={registerMutation.isPending}
+              className="w-full bg-primary hover:bg-primary/90 text-white font-semibold"
+            >
+              {registerMutation.isPending ? "Submitting..." : "Submit"}
+            </Button>
           </form>
         </CardContent>
 
         <CardFooter className="flex flex-col gap-3">
-          <Button
-            type="submit"
-            className="w-full bg-primary hover:bg-primary/90 text-white font-semibold"
-          >
-            Submit
-          </Button>
-
           <p>
             Already have an account?
             <a
