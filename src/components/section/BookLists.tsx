@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import Logo from "@/assets/Logo.svg";
 import type { Book } from "@/types/books";
+import { useRouter } from "next/navigation";
 
 type BookListsProps = {
   title?: string;
@@ -11,6 +12,14 @@ type BookListsProps = {
 };
 
 export function BookLists({ title = "", books = [] }: BookListsProps) {
+
+
+  const router = useRouter();
+
+  const detailBook = (bookId: number) => {
+    // Implementasi navigasi ke halaman detail buku
+    router.push(`/detail/${bookId}`);
+  };
   return (
     <section className="custom-container px-6 md:px-28 bg-white">
       {title && <h2 className="text-lg font-semibold mb-4">{title}</h2>}
@@ -25,6 +34,7 @@ export function BookLists({ title = "", books = [] }: BookListsProps) {
             <Card
               key={book.id ?? index}
               className="rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer hover:scale-105"
+              onClick={() => detailBook(book.id)}
             >
               <CardContent className="flex flex-col p-3">
                 <div className="relative w-full h-40 overflow-hidden bg-[#E0ECFF] rounded-md">

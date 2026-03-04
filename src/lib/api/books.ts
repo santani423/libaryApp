@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "@/lib/api/config";
-import type { BooksApiResponse } from "@/types/books";
+import type { BooksApiResponse, BooksDetailApiResponse } from "@/types/books";
 import { useState } from "react";
  
 export async function getBooks() {
@@ -36,4 +36,23 @@ export async function getBookRecommendations() {
   }
 
   return data.data?.books ?? [];
+}
+
+export async function getBookDetail(bookId: number) {
+  const response = await fetch(`${API_BASE_URL}/books/${bookId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data = (await response.json().catch(() => ({}))) as BooksDetailApiResponse;
+
+  if (!response.ok || !data.success) {
+    const message = data?.message || "Gagal mengambil detail buku.";
+    throw new Error(message);
+  }
+  console.log("okkkkkk",data);
+  
+  return data.data ?? null;
 }

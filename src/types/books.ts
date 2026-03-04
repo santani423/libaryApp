@@ -35,3 +35,8 @@ export type BooksApiResponse = {
     books?: Book[];
   };
 };
+export type BooksDetailApiResponse = {
+  success: boolean;
+  message: string;
+  data?: Book | null;
+};
